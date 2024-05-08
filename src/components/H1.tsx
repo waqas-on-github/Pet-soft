@@ -1,7 +1,7 @@
 
-const H1 = () => {
+const H1 = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div>H1</div>
+        <h1 className="font-medium text-2xl leading-6">{children}</h1>
     )
 }
 

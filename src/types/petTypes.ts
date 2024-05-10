@@ -6,3 +6,13 @@ type petType = {
   age: number;
   notes: string;
 };
+
+type childernType = {
+  children: React.ReactNode;
+};
+
+type petvalueType = {
+  pets: petType[];
+  selectedPetId: string | null;
+  handlePetChange: (id: string) => void;
+};

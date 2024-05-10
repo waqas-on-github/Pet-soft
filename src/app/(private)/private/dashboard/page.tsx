@@ -5,7 +5,9 @@ import { Petlist } from "@/components/petlist"
 import Searchform from "@/components/search-form"
 import Stats from "@/components/stats"
 
-const page = () => {
+const page = async () => {
+
+
     return (
         <main>
 

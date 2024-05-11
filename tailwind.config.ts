@@ -35,29 +35,31 @@ const config = {
         // => @media (min-width: 1536px) { ... }
         "3xl": "1700px",
       },
-      extend: {
-        colors: {
-          bodybg: "#E5E8EC",
-          primerygreen: "#5DC9A8",
-          fullblack: "#0000000",
-        },
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+
+      colors: {
+        bodybg: "#E5E8EC",
+        primerygreen: "#5DC9A8",
+        fullblack: "#0000000",
+        borderBtw: "rgba(0,0,0,0.08)",
       },
     },
+
+    keyframes: {
+      "accordion-down": {
+        from: { height: "0" },
+        to: { height: "var(--radix-accordion-content-height)" },
+      },
+      "accordion-up": {
+        from: { height: "var(--radix-accordion-content-height)" },
+        to: { height: "0" },
+      },
+    },
+    animation: {
+      "accordion-down": "accordion-down 0.2s ease-out",
+      "accordion-up": "accordion-up 0.2s ease-out",
+    },
   },
+
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 

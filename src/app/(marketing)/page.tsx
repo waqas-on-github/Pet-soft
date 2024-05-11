@@ -23,6 +23,7 @@ export default function Home() {
           <Button> <Link href='/signup'> Get started</Link></Button>
           <Button variant='secondary' > <Link href='/login' >Log in </Link> </Button>
         </div>
+        <Button> <Link href='/private/dashboard' > Dashboard </Link> </Button>
 
       </div>
     </section>

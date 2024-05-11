@@ -15,4 +15,6 @@ type petvalueType = {
   pets: petType[];
   selectedPetId: string | null;
   handlePetChange: (id: string) => void;
+  selectedPet: petType | undefined;
+  totalPets: number;
 };

@@ -2,6 +2,7 @@ import { AppFooter } from "@/components/app-footer"
 import { AppHeader } from "@/components/app-header"
 import { BackgroundPattern } from "@/components/background-pattern"
 import PetContextProvider from "@/context/pet-context-provider"
+import SearchContextProvider from "@/context/search-context_prvider"
 
 const Layout = async ({ children }: childernType) => {
 
@@ -20,9 +21,11 @@ const Layout = async ({ children }: childernType) => {
             <BackgroundPattern />
             <div className="max-w-[1050px] mx-auto flex flex-col min-h-screen" >
                 <AppHeader />
+                <SearchContextProvider>
                 <PetContextProvider data={pets} >
-                {children}
+                        {children}
                 </PetContextProvider>
+                </SearchContextProvider>
                 <AppFooter />
             </div>
         </>

@@ -8,7 +8,7 @@ type petType = {
 };
 
 type childernType = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 };
 
 type petvalueType = {
@@ -17,4 +17,15 @@ type petvalueType = {
   handlePetChange: (id: string) => void;
   selectedPet: petType | undefined;
   totalPets: number;
+};
+
+type petButtonProps = {
+  children?: React.ReactNode;
+  actionType: "add" | "edit" | "checkout";
+};
+
+type searchConextType = {
+  children: React.ReactNode;
+  searchQuery: string;
+  handleSrachState: (text: string) => void;
 };

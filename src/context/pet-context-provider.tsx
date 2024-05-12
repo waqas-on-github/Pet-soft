@@ -1,4 +1,5 @@
 "use client"
+import { usePetSearchContext } from '@/lib/hooks'
 import React, { createContext, useState } from 'react'
 
 
@@ -9,6 +10,7 @@ const PetContextProvider = ({ children, data }: { children: React.ReactNode, dat
     // state 
     const [pets, setPets] = useState(data)
     const [selectedPetId, setselectedPetId] = useState<string | null>(null)
+    const { searchQuery } = usePetSearchContext()
 
     // action on state 
     const handlePetChange = (id: string) => {
@@ -20,11 +22,20 @@ const PetContextProvider = ({ children, data }: { children: React.ReactNode, dat
 
     // drived state 
 
+    // for pet selection
     const selectedPet = pets.find((pet) => {
         return selectedPetId === pet.id
     })
 
+    // for pet stats 
     const totalPets = pets.length
+
+    let filterdPets: petType[];
+    // for search feature 
+    if (searchQuery) {  // if there is search query filter the pet array 
+        filterdPets = pets.filter((pet) => pet.name.toLowerCase().includes(searchQuery))
+
+    }
 
 
     return (
@@ -33,7 +44,8 @@ const PetContextProvider = ({ children, data }: { children: React.ReactNode, dat
             selectedPetId,
             selectedPet,
             totalPets,
-            handlePetChange
+            handlePetChange,
+
         }}>
             {children}
 

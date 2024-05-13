@@ -1,17 +1,21 @@
-import { PlusIcon } from "lucide-react"
 import { Button } from "./ui/button"
+import { AddDialog } from "./addDialog"
 
-const PetButton = ({ children, actionType }: petButtonProps) => {
+const PetButton = ({ children, actionType, onClk }: petButtonProps) => {
     if (actionType == 'add') {
-        return (<Button size='icon' className="h-14 w-14" > <PlusIcon /> </Button>)
+        return (
+            <AddDialog action="add" />
+        )
     }
 
     if (actionType == "edit") {
-        return (<Button className=" bg-zinc-200 hover:bg-zinc-300" variant='secondary' >  {children} </Button>)
+        return (
+            <AddDialog action="edit" />
+        )
     }
 
     if (actionType == "checkout") {
-        return (<Button className=" bg-zinc-200 hover:bg-zinc-300" variant='secondary' > {children} </Button>)
+        return (<Button onClick={onClk} className=" bg-zinc-200 hover:bg-zinc-300" variant='secondary' > {children} </Button>)
     }
 
 }

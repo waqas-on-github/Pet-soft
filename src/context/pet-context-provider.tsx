@@ -17,25 +17,71 @@ const PetContextProvider = ({ children, data }: { children: React.ReactNode, dat
         setselectedPetId(id)
     }
 
+    // add a new pet 
+    const handleAddNewPet = (newPet: Omit<petType, "id">) => {
+
+        setPets(prev => [...prev, {
+            ...newPet, id: new Date().toString()
+        }])
+    }
+
+    // edit new pet  
+    const handleEditNewPet = (newId: string, newPetData: Omit<petType, "id">) => {
+
+    // setPets((prev) => {
+    //     prev.map((pet) => {
+    //         if (pet?.id === newId) {
+    //             return {
+    //                 id: newId,
+    //                 ...newPetData
+    //             }
+    //         }
+    //         return pet
+    //     })
+    // })
+
+        const result = pets.filter((pet) => {
+
+            if (pet.id === newId) {
+                return {
+                    id: newId,
+                    ...newPetData
+                }
+            }
+            return pet
+        })
+
+        console.log(result);
 
 
+
+
+    }
+
+    // check/delete pet 
+
+    const handlePetCheckOut = (id: string) => {
+        setPets((perv) => perv?.filter(pet => pet?.id !== id))
+    } 
 
     // drived state 
 
     // for pet selection
-    const selectedPet = pets.find((pet) => {
+    const selectedPet = pets?.find((pet) => {
         return selectedPetId === pet.id
     })
 
     // for pet stats 
-    const totalPets = pets.length
+    const totalPets = pets?.length
 
     let filterdPets: petType[];
     // for search feature 
     if (searchQuery) {  // if there is search query filter the pet array 
-        filterdPets = pets.filter((pet) => pet.name.toLowerCase().includes(searchQuery))
+        filterdPets = pets?.filter((pet) => pet?.name.toLowerCase().includes(searchQuery))
 
     }
+
+
 
 
     return (
@@ -45,6 +91,9 @@ const PetContextProvider = ({ children, data }: { children: React.ReactNode, dat
             selectedPet,
             totalPets,
             handlePetChange,
+            handlePetCheckOut,
+            handleAddNewPet,
+            handleEditNewPet
 
         }}>
             {children}

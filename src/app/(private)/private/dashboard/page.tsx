@@ -11,7 +11,6 @@ const page = async () => {
 
     return (
         <main>
-
             <div className="flex items-center justify-between text-white py-8">
                 <Branding />
                 <Stats />
@@ -21,6 +20,7 @@ const page = async () => {
                 <div className=" md:row-start-1  md:row-span-1  md:col-start-1  md:col-span-1" >
                     <Searchform />
                 </div>
+
                 <div className=" relative md:row-start-2  md:row-span-full   md:col-start-1  md:col-span-1" >
                     <Contentblock>
                         <Petlist />

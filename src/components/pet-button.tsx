@@ -4,13 +4,13 @@ import { AddDialog } from "./addDialog"
 const PetButton = ({ children, actionType, onClk }: petButtonProps) => {
     if (actionType == 'add') {
         return (
-            <AddDialog action="add" />
+            <AddDialog actionType="add" />
         )
     }
 
     if (actionType == "edit") {
         return (
-            <AddDialog action="edit" />
+            <AddDialog actionType="edit" />
         )
     }
 

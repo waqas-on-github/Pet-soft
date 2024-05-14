@@ -15,7 +15,6 @@ type petvalueType = {
   pets: petType[];
   selectedPetId: string | null;
   handlePetChange: (id: string) => void;
-  handlePetCheckOut: (id: string) => void;
   handleAddNewPet: (newPet: Omit<petType, "id">) => void;
   handleEditNewPet: (newId: string, newPetData: Omit<petType, "id">) => void;
   selectedPet: petType | undefined;
@@ -35,6 +34,10 @@ type searchConextType = {
 };
 
 type PetFormProps = {
-  action: "add" | "edit";
-  onFormSubmit: () => void;
+  actionType: "add" | "edit";
+  checkFormOpen: (formResponce: boolean) => void;
+};
+
+type dbResponceType = {
+  message: string;
 };

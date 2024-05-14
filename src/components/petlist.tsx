@@ -9,7 +9,7 @@ export const Petlist = () => {
     const { pets, handlePetChange }: { pets: petType[]; handlePetChange: petvalueType["handlePetChange"] } = usePetContext()
 
     // data filtration logic 
-    let filterdPets;
+    let filterdPets; 
     if (searchQuery) {
         filterdPets = pets.filter((pet) => pet?.name.toLowerCase().includes(searchQuery))
     }
@@ -24,9 +24,9 @@ export const Petlist = () => {
 
     // data filtration logic 
 
-    if (allPets && allPets.length === 0) {
-        return <div className="flex items-center justify-center mt-[58%]" > no pet found  </div>
-    }
+    // if (allPets && allPets.length === 0) {
+    //     return <div className="flex items-center justify-center mt-[58%]" > no pet found  </div>
+    // }
 
     return (
         <ul className=" bg-white border-b border-black/[0.08]" >

@@ -1,5 +1,4 @@
 "use client"
-import { addPet } from '@/actions/actions'
 import { usePetSearchContext } from '@/lib/hooks'
 import React, { createContext, useState } from 'react'
 
@@ -20,7 +19,6 @@ const PetContextProvider = ({ children, data: pets }: { children: React.ReactNod
     // add a new pet 
     const handleAddNewPet = (newPet: Omit<petType, "id">) => {
 
-        addPet(newPet)
 
     }
 

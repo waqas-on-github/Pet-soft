@@ -1,7 +1,8 @@
 import { Button } from "./ui/button"
 import { AddDialog } from "./addDialog"
 
-const PetButton = ({ children, actionType, onClk }: petButtonProps) => {
+const PetButton = ({ disabled, children, actionType, onClk }: petButtonProps) => {
+
     if (actionType == 'add') {
         return (
             <AddDialog actionType="add" />
@@ -15,7 +16,7 @@ const PetButton = ({ children, actionType, onClk }: petButtonProps) => {
     }
 
     if (actionType == "checkout") {
-        return (<Button onClick={onClk} className=" bg-zinc-200 hover:bg-zinc-300" variant='secondary' > {children} </Button>)
+        return (<Button onClick={onClk} disabled={disabled} className=" disabled:cursor-wait bg-zinc-200 hover:bg-zinc-300 " variant='secondary' > {children} </Button>)
     }
 
 }

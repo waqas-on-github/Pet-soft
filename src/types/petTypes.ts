@@ -25,6 +25,7 @@ type petButtonProps = {
   children?: React.ReactNode;
   actionType: "add" | "edit" | "checkout";
   onClk?: () => void;
+  disabled?: boolean;
 };
 
 type searchConextType = {
@@ -40,4 +41,12 @@ type PetFormProps = {
 
 type dbResponceType = {
   message: string;
+  error: unknown;
+};
+
+type submitFormType = {
+  formData: FormData;
+  actionType: "add" | "edit";
+  checkFormOpen: (formResponce: boolean) => void;
+  selectedPet: petType | undefined;
 };

@@ -1,11 +1,11 @@
 'use client'
 import Image from "next/image";
 import PetButton from "./pet-button";
-import { usePetContext } from "@/lib/hooks";
-import { deletePet } from "@/actions/actions";
+import DeletePetBtn from "./delete-pet_btn";
 
 export function TopView({ pet }: { pet: petType }) {
-    const { selectedPetId } = usePetContext()
+
+
     return (<div className="flex items-center bg-white px-8 py-5 border-b  border-borderBtw " >
         <Image
             src={pet?.imageUrl}
@@ -17,7 +17,7 @@ export function TopView({ pet }: { pet: petType }) {
         <h2 className="text-3xl font-semibold leading-7 ml-5" >{pet?.name}</h2>
         <div className="ml-auto flex items-center justify-center gap-3" >
             <PetButton actionType="edit" > Edit</PetButton>
-            <PetButton onClk={() => { deletePet(selectedPetId) }} actionType="checkout" > Checkout </PetButton>
+            <DeletePetBtn />
         </div>
     </div>
     )

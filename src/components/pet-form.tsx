@@ -30,15 +30,15 @@ export const PetForm = ({ actionType, checkFormOpen }: PetFormProps) => {
     )
 
     // "client action"  for server action 
-    async function submitForm(formData: FormData) {
+    async function submitForm() {
 
         let responce = await trigger()
         if (!responce) return null
-
+        const data = getValues()
         if (actionType === "add") {
             try { 
 
-            const res = await addPet(formData)
+                const res = await addPet(data)
             res && checkFormOpen(false)
 
         } catch (error) {
@@ -54,7 +54,7 @@ export const PetForm = ({ actionType, checkFormOpen }: PetFormProps) => {
             try {
                 if (selectedPet) {
 
-                    const res = await editPet(selectedPet?.id, formData)
+                    const res = await editPet(selectedPet?.id, data)
                     res && checkFormOpen(false)
 
 

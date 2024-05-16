@@ -11,7 +11,7 @@ const Layout = async ({ children }: childernType) => {
 
 
     // geting pets from db 
-    const pets = await getPets()
+    const pets: petType[] = await getPets()
     // type narrowning for fix ing type issues and better error handling
 
 
@@ -22,7 +22,7 @@ const Layout = async ({ children }: childernType) => {
             <div className="max-w-[1050px] mx-auto flex flex-col min-h-screen" >
                 <AppHeader />
                 <SearchContextProvider>
-                <PetContextProvider data={pets} >
+                    <PetContextProvider data={[...pets]} >
                         {children}
                 </PetContextProvider>
                 </SearchContextProvider>

@@ -2,41 +2,33 @@
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { sleep } from "@/lib/utils";
-import { collectFormData, insertDataToDb } from "./helpers";
-import { petFormSchem } from "@/lib/schemas";
+import { insertDataToDb, validatePetData } from "./helpers";
+import { petTypetwo } from "@/lib/schemas";
 
-export const addPet = async (data: FormData) => {
-  await sleep(2000);
-  // collecting data form form
-  const petData: Omit<petType, "id"> = collectFormData(data);
-
+export const addPet = async (data: petTypetwo) => {
   //validating data
-  const isvalidPet = petFormSchem.safeParse(petData);
-  if (!isvalidPet) {
-    return { message: "invalid pet data ", error: isvalidPet };
-  }
-
+  const petdata = validatePetData(data);
   //creating a new pet
-  const responce = await insertDataToDb(petData);
-  if ("message" in responce) {
-    console.log(responce);
+  const responce = await insertDataToDb(petdata);
 
+  if ("message" in responce) {
     throw new Error(responce.message);
   }
-  revalidatePath("/private/dashboard", "page");
 
+  revalidatePath("/private/dashboard", "page");
   return responce;
 };
 
-export const editPet = async (petId: string, formData: FormData) => {
+export const editPet = async (petId: string, data: unknown) => {
   if (!petId) throw new Error("no pet id provided");
-  const data: Omit<petType, "id"> = collectFormData(formData);
+
+  const petdata = validatePetData(data);
 
   let updatedPet;
   try {
     updatedPet = prisma.pet.update({
       where: { id: petId },
-      data: { ...data },
+      data: { ...petdata },
     });
   } catch (error) {
     console.error(error);
@@ -49,7 +41,6 @@ export const editPet = async (petId: string, formData: FormData) => {
 
 // delete pet
 export const deletePet = async (petId: string) => {
-  await sleep(2000);
   // checking pet id exists or not
   if (!petId) throw new Error("no pet id provided");
 

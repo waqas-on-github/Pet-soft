@@ -1,7 +1,14 @@
+import H1 from "@/components/H1"
+import AuthForm from "@/components/auth-form"
 
 const page = () => {
     return (
-        <div> login page</div>
+        <main>
+            <H1 className="text-center" >Sign Up </H1>
+
+            <AuthForm />
+
+        </main>
     )
 }
 

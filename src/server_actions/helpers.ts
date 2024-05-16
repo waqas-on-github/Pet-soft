@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import { petFormSchem, petTypetwo } from "@/lib/schemas";
 import { Pet } from "@prisma/client";
 
 export const collectFormData = (formData: FormData) => {
@@ -35,3 +36,13 @@ export const insertDataToDb = async (
 
   return responce;
 };
+
+export function validatePetData(data: unknown) {
+  //validating data
+  const isvalidPet = petFormSchem.safeParse(data);
+  if (!isvalidPet || isvalidPet.error || !isvalidPet.success) {
+    throw new Error("pet validation failed");
+  }
+
+  return isvalidPet.data;
+}

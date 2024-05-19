@@ -1,5 +1,5 @@
 import prisma from "@/lib/db";
-import { petFormSchem, petTypetwo } from "@/lib/schemas";
+import { authSchema, petFormSchem } from "@/lib/schemas";
 import { Pet } from "@prisma/client";
 
 export const collectFormData = (formData: FormData) => {
@@ -38,11 +38,21 @@ export const insertDataToDb = async (
 };
 
 export function validatePetData(data: unknown) {
-  //validating data
+  //validating pet data
   const isvalidPet = petFormSchem.safeParse(data);
   if (!isvalidPet || isvalidPet.error || !isvalidPet.success) {
     throw new Error("pet validation failed");
   }
 
   return isvalidPet.data;
+}
+
+export function validateUserData(data: unknown) {
+  // validateing user data
+  const isvalidData = authSchema.safeParse(data);
+  if (!isvalidData || isvalidData.error || !isvalidData.success) {
+    throw new Error("user validation failed");
+  }
+
+  return isvalidData.data;
 }

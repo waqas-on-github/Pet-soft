@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { authSchema, authType } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { logIn } from "@/server_actions/userActions"
 
 
 
@@ -21,13 +22,13 @@ const AuthForm = () => {
 
 
     //"client action for server action"
-    async function sub() {
+    async function submit() {
 
         const res = await trigger()
         if (!res) return
 
         const values = getValues()
-
+        await logIn(values)
         reset()
     }
 
@@ -35,7 +36,7 @@ const AuthForm = () => {
 
 
     return (
-        <form action={sub} className="flex flex-col gap-3 items-center justify-center" >
+        <form action={submit} className="flex flex-col gap-3 items-center justify-center" >
             <div>
                 <Label htmlFor="email"> Email </Label>
                 <Input className="bg-white/50 " {...register("email", { required: "field is required " })} id="email" />

@@ -1,5 +1,5 @@
 import { z } from "zod";
-
+// pet schema 
 export const petFormSchem = z
   .object({
     name: z.string().trim().min(3, { message: "name is required" }).max(20),
@@ -24,10 +24,10 @@ export const petFormSchem = z
 
 export type petTypetwo = z.infer<typeof petFormSchem>;
 
-
+// user schema 
 export const authSchema = z.object({
   email: z.string().trim().email({ message: "email is required" }),
-  password: z.string().trim().min(8, { message: "min 8 chars required" }),
+  password: z.string().trim().min(5, { message: "min 8 chars required" }),
 });
 
 export type authType = z.infer<typeof authSchema>;

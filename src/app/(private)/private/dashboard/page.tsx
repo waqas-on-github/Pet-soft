@@ -21,7 +21,7 @@ const page = async () => {
                     <Searchform />
                 </div>
 
-                <div className=" relative md:row-start-2  md:row-span-full overflow-scroll   md:col-start-1  md:col-span-1" >
+                <div className=" relative md:row-start-2  md:row-span-full overflow-y-auto   md:col-start-1  md:col-span-1" >
                     <Contentblock>
                         <Petlist />
                         <div className="absolute bottom-4 right-4" >

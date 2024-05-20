@@ -1,10 +1,9 @@
 import NextAuth, { NextAuthConfig } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+import credentials from "next-auth/providers/credentials";
 import prisma from "./db";
 import bcrypt from "bcryptjs";
 
-// Your own logic for dealing with plaintext password strings; be careful!
-export const config = {
+const config = {
   pages: {
     signIn: "/login",
   },
@@ -13,65 +12,69 @@ export const config = {
     strategy: "jwt",
   },
   providers: [
-    Credentials({
-      authorize: async (credentials) => {
-        // will run on every login attempt
-        // check if credentials exists and have value\
+    credentials({
+      //runs on login
+      async authorize(credentials) {
+        // console.log(credentials);
+        console.log("crediantials in provider ....................");
 
-        const { email, password } = credentials;
+        const { email, hashedPassword } = credentials;
         let user;
-        // qeuering user form db by email
-        try {
+        let isValidepassword;
+        // check email
+        if (typeof email === "string") {
           user = await prisma.user.findUnique({
-            where: {
-              email: email,
-            },
+            where: { email: email },
           });
-        } catch (error) {
-          console.log(error);
-          console.log("prisma error ");
         }
-        // throwing error if user record not found in db
+
         if (!user) {
-          console.log("no user found");
-          return null;
+          console.log(" failed to get user ------- error form provider");
         }
-        // if we reached here suer we have user object let check password also
-        const isPasswordCorrect = await bcrypt.compare(
-          password,
-          user?.hashedPassword
-        );
-        if (!isPasswordCorrect) {
-          console.log("invalid crediantial");
+
+        // // check password
+        if (user) {
+          isValidepassword = await bcrypt.compare(
+            hashedPassword,
+            user?.hashedPassword
+          );
+        }
+        console.log(isValidepassword);
+
+        // console.log(user);
+
+        if (!isValidepassword) {
+          console.log("invalid  credintials  -------error from provider  ");
           return null;
         }
 
         return user;
-
-        // comparing hashed password
       },
     }),
   ],
-
   callbacks: {
-    authorized: ({ request, auth }) => {
-      // will run on every request
-      console.log(auth);
-      const isLoggedIn = Boolean(auth?.user);
+    authorized({ request, auth }) {
+      // run on every request
 
-      const isTryingToAccessAppDashboard =
-        request.nextUrl.pathname.includes("/private");
-      //   if (!isLoggedIn && isTryingToAccessAppDashboard) {
-      //     return false;
-      //   }
+      const isValidUser = auth?.user;
 
-      //   if (isLoggedIn && isTryingToAccessAppDashboard) {
-      //     return true;
-      //   }
+      const isTryingToAccessApp = request.nextUrl.pathname.includes("/private");
 
-      //   if (!isLoggedIn && !isTryingToAccessAppDashboard) {
-      //     return true;
-      //   }
+      if (!isValidUser && isTryingToAccessApp) {
+        return false;
+      }
+      if (isValidUser && isTryingToAccessApp) {
+        return true;
+      }
+
+      if (isValidUser && !isTryingToAccessApp) {
+        // const url = new URL("/private/dashboard", request.nextUrl);
+        // return Response.redirect(url.href);
+        return true;
+      }
+      if (!isValidUser && !isTryingToAccessApp) {
+        return true;
+      }
     },
   },
 } satisfies NextAuthConfig;

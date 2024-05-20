@@ -1,9 +1,15 @@
 "use server";
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { sleep } from "@/lib/utils";
-import { insertDataToDb, validatePetData } from "./helpers";
-import { petTypetwo } from "@/lib/schemas";
+import {
+  checkUserExists,
+  insertDataToDb,
+  validatePetData,
+  validateUserData,
+} from "./helpers";
+import { authType, petTypetwo } from "@/lib/schemas";
+import { signIn, signOut } from "@/lib/auth";
+import bcrypt from "bcryptjs";
 
 export const addPet = async (data: petTypetwo) => {
   //validating data
@@ -63,17 +69,41 @@ export const deletePet = async (petId: string) => {
   return deletedPet;
 };
 
-const petData = {
-  data: {
-    success: true,
-    data: {
-      name: "adsad",
-      ownerName: "asdasdsaa",
-      imageUrl:
-        "https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&q=100&w=1970&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      age: 1,
-      notes: "asda",
-    },
-    name: "hola",
-  },
-};
+//-----------user actions -----
+export async function login(authData: authType) {
+  // validate data
+  const validatedUserData = validateUserData(authData);
+  await signIn("credentials", validatedUserData);
+}
+
+export async function logOut() {
+  await signOut({ redirectTo: "/" });
+}
+
+export async function signup(authData: authType) {
+  // validate data
+  const validatedUserData = validateUserData(authData);
+  // check email if it already exists
+  await checkUserExists(validatedUserData.email);
+  // after validating hash password
+  const hashedPassword = await bcrypt.hash(
+    validatedUserData.hashedPassword,
+    10
+  );
+  validatedUserData.hashedPassword = hashedPassword;
+
+  // insert data in to db
+
+  let dbInsertResult;
+  try {
+    dbInsertResult = await prisma.user.create({
+      data: {
+        ...validatedUserData,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+  await login(authData);
+}

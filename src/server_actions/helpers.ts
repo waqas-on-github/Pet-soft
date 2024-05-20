@@ -56,3 +56,22 @@ export function validateUserData(data: unknown) {
 
   return isvalidData.data;
 }
+
+// checking user existance in db 
+export async function checkUserExists(email: string) {
+  let doseUserExists;
+  try {
+    doseUserExists = await prisma.user.findUnique({
+      where: { email: email },
+    });
+
+    if (doseUserExists) {
+      if ("email" in doseUserExists) {
+        throw new Error("user already exists");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error("user already exists");
+  }
+}

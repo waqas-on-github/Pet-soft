@@ -5,8 +5,8 @@ const page = () => {
     return (
         <main>
 
-            <H1 className="text-center" >Log In</H1>
-            <AuthForm />
+            <H1 className="text-center" >Sign Up </H1>
+            <AuthForm type='signup' />
         </main>
     )
 }

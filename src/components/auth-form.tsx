@@ -6,13 +6,16 @@ import { usePathname } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { authSchema, authType } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { logIn } from "@/server_actions/userActions"
+import { login, signup } from "@/server_actions/actions"
+import { validateUserData } from "@/server_actions/helpers"
 
 
 
-const AuthForm = () => {
+const AuthForm = ({ type }: { type: 'login' | 'signup' }) => {
     // getting current path name 
     const pathName = usePathname()
+    // const auth = useSession()
+    // console.log(auth);
 
     // hooke form for form state managment 
     const { register, getValues, trigger, formState: { errors }, reset }
@@ -23,12 +26,24 @@ const AuthForm = () => {
 
     //"client action for server action"
     async function submit() {
-
+        // trigger from 
         const res = await trigger()
         if (!res) return
 
+        // get values from from 
         const values = getValues()
-        await logIn(values)
+
+        // validate inputs 
+
+        const validatedValues = validateUserData(values)
+
+        if (type === "login") {
+            await login(validatedValues)
+        }
+
+        if (type === "signup") {
+            await signup(validatedValues)
+        }
         reset()
     }
 
@@ -44,12 +59,12 @@ const AuthForm = () => {
             </div>
             <div>
                 <Label htmlFor="password" >Password </Label>
-                <Input className="bg-white/50" type="password" {...register("password")} id="password" />
-                {errors?.password && <p className="text-red-700" >{errors?.password.message}</p>}
+                <Input className="bg-white/50" type="password" {...register("hashedPassword")} id="password" />
+                {errors?.hashedPassword && <p className="text-red-700" >{errors?.hashedPassword.message}</p>}
 
             </div>
 
-            <Button size="smx" > {pathName === "/login" ? "SignUp" : "Login"} </Button>
+            <Button size="smx" > {pathName === "/login" ? "Login" : "Signup"} </Button>
 
         </form>
     )

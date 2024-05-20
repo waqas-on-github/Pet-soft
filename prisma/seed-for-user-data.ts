@@ -1,11 +1,11 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 const userData: Prisma.UserCreateInput = {
   email: "example@gmail.com",
-  hashedPassword: "21464314317",
+  hashedPassword: "",
   pets: {
     create: [
       {

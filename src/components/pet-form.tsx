@@ -8,6 +8,7 @@ import { addPet, editPet } from "@/server_actions/actions";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { petFormSchem } from "@/lib/schemas";
+import { PetFormProps, petType } from "@/types/petTypes";
 
 
 export const PetForm = ({ actionType, checkFormOpen }: PetFormProps) => {

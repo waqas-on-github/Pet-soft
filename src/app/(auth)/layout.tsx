@@ -1,5 +1,6 @@
 import AuthFooter from "@/components/aut-footer";
 import Logo from "@/components/logo"
+import { childernType } from "@/types/petTypes";
 
 const Layout = ({ children }: childernType) => {
 

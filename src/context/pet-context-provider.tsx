@@ -1,5 +1,5 @@
 "use client"
-import { usePetSearchContext } from '@/lib/hooks'
+import { petType, petvalueType } from '@/types/petTypes'
 import React, { createContext, useState } from 'react'
 
 
@@ -9,7 +9,6 @@ export const petContext = createContext<petvalueType | null>(null)
 const PetContextProvider = ({ children, data: pets }: { children: React.ReactNode, data: petType[] }) => {
     // state 
     const [selectedPetId, setselectedPetId] = useState<string | null>(null)
-    const { searchQuery } = usePetSearchContext()
 
     // action on state 
     const handlePetChange = (id: string) => {
@@ -71,7 +70,8 @@ const PetContextProvider = ({ children, data: pets }: { children: React.ReactNod
             totalPets,
             handlePetChange,
             handleAddNewPet,
-            handleEditNewPet
+            handleEditNewPet,
+
 
         }}>
             {children}

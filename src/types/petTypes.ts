@@ -1,4 +1,6 @@
-type petType = {
+import { authType } from "@/lib/schemas";
+
+export type petType = {
   id: string;
   name: string;
   ownerName: string;
@@ -7,11 +9,11 @@ type petType = {
   notes: string;
 };
 
-type childernType = {
+export type childernType = {
   children?: React.ReactNode;
 };
 
-type petvalueType = {
+export type petvalueType = {
   pets: petType[];
   selectedPetId: string | null;
   handlePetChange: (id: string) => void;
@@ -21,32 +23,37 @@ type petvalueType = {
   totalPets: number;
 };
 
-type petButtonProps = {
+export type petButtonProps = {
   children?: React.ReactNode;
   actionType: "add" | "edit" | "checkout";
   onClk?: () => void;
   disabled?: boolean;
 };
 
-type searchConextType = {
+export type searchConextType = {
   children: React.ReactNode;
   searchQuery: string;
   handleSrachState: (text: string) => void;
 };
 
-type PetFormProps = {
+export type PetFormProps = {
   actionType: "add" | "edit";
   checkFormOpen: (formResponce: boolean) => void;
 };
 
-type dbResponceType = {
+export type dbResponceType = {
   message: string;
   error: unknown;
 };
 
-type submitFormType = {
+export type submitFormType = {
   formData: FormData;
   actionType: "add" | "edit";
   checkFormOpen: (formResponce: boolean) => void;
   selectedPet: petType | undefined;
+};
+
+export type authProviderType = {
+  children: React.ReactNode;
+  user: authType | undefined;
 };

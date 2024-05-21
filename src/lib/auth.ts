@@ -15,9 +15,6 @@ const config = {
     credentials({
       //runs on login
       async authorize(credentials) {
-        // console.log(credentials);
-        console.log("crediantials in provider ....................");
-
         const { email, hashedPassword } = credentials;
         let user;
         let isValidepassword;
@@ -33,15 +30,12 @@ const config = {
         }
 
         // // check password
-        if (user) {
+        if (user && typeof hashedPassword === "string") {
           isValidepassword = await bcrypt.compare(
             hashedPassword,
             user?.hashedPassword
           );
         }
-        console.log(isValidepassword);
-
-        // console.log(user);
 
         if (!isValidepassword) {
           console.log("invalid  credintials  -------error from provider  ");
@@ -66,15 +60,15 @@ const config = {
       if (isValidUser && isTryingToAccessApp) {
         return true;
       }
-
       if (isValidUser && !isTryingToAccessApp) {
-        // const url = new URL("/private/dashboard", request.nextUrl);
-        // return Response.redirect(url.href);
-        return true;
+        const url = new URL("/private/dashboard", request.nextUrl);
+        return Response.redirect(url.href);
       }
       if (!isValidUser && !isTryingToAccessApp) {
         return true;
       }
+
+      return false;
     },
   },
 } satisfies NextAuthConfig;

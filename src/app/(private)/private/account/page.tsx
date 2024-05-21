@@ -4,6 +4,7 @@ import { auth } from "../../../../lib/auth"
 import { redirect } from "next/navigation"
 import { SignOutBtn } from "@/components/sign-out-btn"
 
+
 const page = async () => {
 
     const session = await auth()
@@ -11,6 +12,7 @@ const page = async () => {
     if (!session) {
         redirect("/login")
     }
+
 
     return (
         <>

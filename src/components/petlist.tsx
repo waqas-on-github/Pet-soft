@@ -1,5 +1,6 @@
 'use client'
 import { usePetContext, usePetSearchContext } from "@/lib/hooks"
+import { petType, petvalueType } from "@/types/petTypes"
 import Image from "next/image"
 
 export const Petlist = () => {

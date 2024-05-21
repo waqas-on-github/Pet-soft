@@ -1,5 +1,6 @@
 import { Button } from "./ui/button"
 import { AddDialog } from "./addDialog"
+import { petButtonProps } from "@/types/petTypes"
 
 const PetButton = ({ disabled, children, actionType, onClk }: petButtonProps) => {
 

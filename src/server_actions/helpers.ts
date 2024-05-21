@@ -19,8 +19,6 @@ export const collectFormData = (formData: FormData) => {
 export const insertDataToDb = async (
   data: Omit<petType, "id">
 ): Promise<Pet | dbResponceType> => {
-  console.log(data);
-
   let responce;
   try {
     responce = await prisma.pet.create({
@@ -28,9 +26,6 @@ export const insertDataToDb = async (
     });
     if (!responce) return { message: "failed to add pet", error: "" };
   } catch (error) {
-    console.log(error);
-    console.log(error);
-
     return { message: "failed to add pet", error: error };
   }
 
@@ -71,7 +66,6 @@ export async function checkUserExists(email: string) {
       }
     }
   } catch (error) {
-    console.log(error);
     throw new Error("user already exists");
   }
 }

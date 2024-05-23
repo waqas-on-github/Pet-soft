@@ -9,14 +9,15 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { validateUserData } from "@/server_actions/helpers"
 import { login } from "@/server_actions/userActions"
 import { signup } from "@/server_actions/signUpAction"
+import { useFormStatus } from "react-dom"
+import AuthFormBtn from "./auth-form-btn"
 
 
 
 const AuthForm = ({ type }: { type: 'login' | 'signup' }) => {
     // getting current path name 
-    const pathName = usePathname()
-    // const auth = useSession()
-    // console.log(auth);
+
+
 
     // hooke form for form state managment 
     const { register, getValues, trigger, formState: { errors }, reset }
@@ -63,9 +64,11 @@ const AuthForm = ({ type }: { type: 'login' | 'signup' }) => {
                 <Input className="bg-white/50" type="password" {...register("hashedPassword")} id="password" />
                 {errors?.hashedPassword && <p className="text-red-700" >{errors?.hashedPassword.message}</p>}
 
-            </div>
 
-            <Button size="smx" > {pathName === "/login" ? "Login" : "Signup"} </Button>
+            </div>
+            <AuthFormBtn />
+
+
 
         </form>
     )

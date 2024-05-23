@@ -1,7 +1,7 @@
 import H1 from "@/components/H1"
 import { Contentblock } from "@/components/content-block"
 import { SignOutBtn } from "@/components/sign-out-btn"
-import { CheckAuth } from "@/server_actions/helpers_for_server"
+import { CheckAuth } from "@/utils/server_utils"
 
 
 const page = async () => {

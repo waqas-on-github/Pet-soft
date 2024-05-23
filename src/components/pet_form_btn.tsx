@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from './ui/button'
 import { useFormStatus } from 'react-dom'
+import { PetFormProps } from '@/types/petTypes'
 
 export const PetFormBtn = ({ actionType }: Omit<PetFormProps, "checkFormOpen">) => {
     const { pending } = useFormStatus()

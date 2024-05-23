@@ -1,7 +1,7 @@
 "use server";
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { CheckAuth, getSinglePet } from "./helpers_for_server";
+import { CheckAuth, getSinglePet } from "../utils/server_utils";
 
 // delete pet
 export const deletePet = async (petId: string) => {

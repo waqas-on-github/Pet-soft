@@ -3,7 +3,7 @@ import { AppHeader } from "@/components/app-header"
 import { BackgroundPattern } from "@/components/background-pattern"
 import PetContextProvider from "@/context/pet-context-provider"
 import SearchContextProvider from "@/context/search-context_prvider"
-import { CheckAuth, getPets } from "@/server_actions/helpers_for_server"
+import { CheckAuth, getPets } from "@/utils/server_utils"
 import { childernType, petType } from "@/types/petTypes"
 
 

@@ -4,9 +4,9 @@ import { petTypetwo } from "@/lib/schemas";
 import { validatePetData } from "./helpers";
 import { revalidatePath } from "next/cache";
 import { dbResponceType, petType } from "@/types/petTypes";
-import { Pet } from "@prisma/client";
+import { Pet, Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
-import { CheckAuth } from "./helpers_for_server";
+import { CheckAuth } from "../utils/server_utils";
 
 export const addPet = async (data: petTypetwo) => {
   // checking user is authancated ?
@@ -43,6 +43,11 @@ export const insertDataToDb = async (
     });
     if (!responce) return { message: "failed to add pet", error: "" };
   } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return { message: "pet alredy exists", error: error };
+      }
+    }
     return { message: "failed to add pet", error: error };
   }
 

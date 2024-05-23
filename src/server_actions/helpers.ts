@@ -1,25 +1,7 @@
 import prisma from "@/lib/db";
 import { authSchema, petFormSchem } from "@/lib/schemas";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
 
-// checking user existance in db
-export async function checkUserExists(email: string) {
-  let doseUserExists;
-  try {
-    doseUserExists = await prisma.user.findUnique({
-      where: { email: email },
-    });
 
-    if (doseUserExists) {
-      if ("email" in doseUserExists) {
-        throw new Error("user already exists");
-      }
-    }
-  } catch (error) {
-    throw new Error("user already exists");
-  }
-}
 
 //validating pet data
 export function validatePetData(data: unknown) {

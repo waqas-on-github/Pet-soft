@@ -59,3 +59,21 @@ export const getUser = async (email: string | null | undefined) => {
     }
   }
 };
+
+// checking user existance in db
+export async function checkUserExists(email: string) {
+  let doseUserExists;
+  try {
+    doseUserExists = await prisma.user.findUnique({
+      where: { email: email },
+    });
+
+    if (doseUserExists) {
+      if ("email" in doseUserExists) {
+        throw new Error("user already exists");
+      }
+    }
+  } catch (error) {
+    throw new Error("user already exists");
+  }
+}

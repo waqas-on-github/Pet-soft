@@ -70,7 +70,26 @@ const config = {
 
       return false;
     },
+    // run on jwt creation
+    jwt: ({ token, user }) => {
+      // console.log("run on ever jwt creation ");
+
+      if (user && user.id) {
+        // on sign in
+        // console.log("runs on singIn/ logIn ");
+        token.userId = user.id;
+      }
+      return token;
+    },
+    // runs on client side session
+    session: ({ session, token }) => {
+      if (session.user) {
+        session.user.id = token?.userId;
+      }
+
+      return session;
+    },
   },
 } satisfies NextAuthConfig;
 
-export const { auth, signIn, signOut } = NextAuth(config);
+export const { auth, signIn, signOut, handlers } = NextAuth(config);

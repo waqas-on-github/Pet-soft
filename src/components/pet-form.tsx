@@ -4,11 +4,12 @@ import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { usePetContext } from "@/lib/hooks";
 import { PetFormBtn } from "./pet_form_btn";
-import { addPet, editPet } from "@/server_actions/actions";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { petFormSchem } from "@/lib/schemas";
 import { PetFormProps, petType } from "@/types/petTypes";
+import { addPet } from "@/server_actions/addPetAction";
+import { editPet } from "@/server_actions/editPetAction";
 
 
 export const PetForm = ({ actionType, checkFormOpen }: PetFormProps) => {
@@ -35,12 +36,14 @@ export const PetForm = ({ actionType, checkFormOpen }: PetFormProps) => {
 
         let responce = await trigger()
         if (!responce) return null
+
+
         const data = getValues()
+
         if (actionType === "add") {
             try { 
-
                 const res = await addPet(data)
-            res && checkFormOpen(false)
+                res && checkFormOpen(false)
 
         } catch (error) {
             console.log(error);

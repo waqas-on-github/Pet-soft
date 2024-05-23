@@ -1,58 +1,9 @@
 import prisma from "@/lib/db";
 import { authSchema, petFormSchem } from "@/lib/schemas";
-import { Pet } from "@prisma/client";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
-export const collectFormData = (formData: FormData) => {
-  const data = {
-    ownerName: formData.get("ownerName") as string,
-    name: formData.get("name") as string,
-    imageUrl:
-      (formData.get("imageUrl") as string) ||
-      ("https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&q=100&w=1970&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" as string),
-    age: +(formData.get("age") as string),
-    notes: formData.get("notes") as string,
-  };
-
-  return data;
-};
-
-export const insertDataToDb = async (
-  data: Omit<petType, "id">
-): Promise<Pet | dbResponceType> => {
-  let responce;
-  try {
-    responce = await prisma.pet.create({
-      data: { ...data },
-    });
-    if (!responce) return { message: "failed to add pet", error: "" };
-  } catch (error) {
-    return { message: "failed to add pet", error: error };
-  }
-
-  return responce;
-};
-
-export function validatePetData(data: unknown) {
-  //validating pet data
-  const isvalidPet = petFormSchem.safeParse(data);
-  if (!isvalidPet || isvalidPet.error || !isvalidPet.success) {
-    throw new Error("pet validation failed");
-  }
-
-  return isvalidPet.data;
-}
-
-export function validateUserData(data: unknown) {
-  // validateing user data
-  const isvalidData = authSchema.safeParse(data);
-  if (!isvalidData || isvalidData.error || !isvalidData.success) {
-    throw new Error("user validation failed");
-  }
-
-  return isvalidData.data;
-}
-
-// checking user existance in db 
+// checking user existance in db
 export async function checkUserExists(email: string) {
   let doseUserExists;
   try {
@@ -69,3 +20,24 @@ export async function checkUserExists(email: string) {
     throw new Error("user already exists");
   }
 }
+
+//validating pet data
+export function validatePetData(data: unknown) {
+  const isvalidPet = petFormSchem.safeParse(data);
+  if (!isvalidPet || isvalidPet.error || !isvalidPet.success) {
+    throw new Error("pet validation failed");
+  }
+
+  return isvalidPet.data;
+}
+
+// validateing user data
+export function validateUserData(data: unknown) {
+  const isvalidData = authSchema.safeParse(data);
+  if (!isvalidData || isvalidData.error || !isvalidData.success) {
+    throw new Error("user validation failed");
+  }
+
+  return isvalidData.data;
+}
+

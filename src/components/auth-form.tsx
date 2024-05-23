@@ -6,8 +6,9 @@ import { usePathname } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { authSchema, authType } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { login, signup } from "@/server_actions/actions"
 import { validateUserData } from "@/server_actions/helpers"
+import { login } from "@/server_actions/userActions"
+import { signup } from "@/server_actions/signUpAction"
 
 
 

@@ -7,6 +7,7 @@ export type petType = {
   imageUrl: string;
   age: number;
   notes: string;
+  userId?: string;
 };
 
 export type childernType = {

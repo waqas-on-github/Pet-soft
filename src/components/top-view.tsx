@@ -2,6 +2,7 @@
 import Image from "next/image";
 import PetButton from "./pet-button";
 import DeletePetBtn from "./delete-pet_btn";
+import { petType } from "@/types/petTypes";
 
 export function TopView({ pet }: { pet: petType }) {
 

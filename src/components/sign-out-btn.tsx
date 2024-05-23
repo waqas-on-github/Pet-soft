@@ -1,5 +1,5 @@
 "use client"
-import { logOut } from "@/server_actions/actions"
+import { logOut } from "@/server_actions/userActions"
 import { Button } from "./ui/button"
 
 export const SignOutBtn = () => {

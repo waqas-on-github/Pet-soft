@@ -3,25 +3,17 @@ import { AppHeader } from "@/components/app-header"
 import { BackgroundPattern } from "@/components/background-pattern"
 import PetContextProvider from "@/context/pet-context-provider"
 import SearchContextProvider from "@/context/search-context_prvider"
-import { getPets, getUser } from "@/lib/fetchers"
-import { auth } from "@/lib/auth"
-import { redirect } from "next/navigation"
+import { CheckAuth, getPets } from "@/server_actions/helpers_for_server"
 import { childernType, petType } from "@/types/petTypes"
 
 
 const Layout = async ({ children }: childernType) => {
 
-    const session = await auth()
-
-    if (!session) {
-        redirect("/login")
-    }
-
+    const session = await CheckAuth()
 
 
     // geting pets from db 
-    const user = await getUser(session?.user?.email)
-    const pets: petType[] = await getPets(user?.id)
+    const pets: petType[] = await getPets(session.user?.id)
     // type narrowning for fix ing type issues and better error handling
     return (
         <> 
@@ -31,8 +23,9 @@ const Layout = async ({ children }: childernType) => {
                 <SearchContextProvider>
                     <PetContextProvider data={[...pets]} >
                         {children}
-                </PetContextProvider>
+                    </PetContextProvider>
                 </SearchContextProvider>
+
                 <AppFooter />
             </div>
         </>

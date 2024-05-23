@@ -1,7 +1,8 @@
+"use client"
 import React, { useTransition } from 'react'
 import PetButton from './pet-button'
 import { usePetContext } from '@/lib/hooks'
-import { deletePet } from '@/server_actions/actions'
+import { deletePet } from '@/server_actions/deletePetAction'
 
 const DeletePetBtn = () => {
 

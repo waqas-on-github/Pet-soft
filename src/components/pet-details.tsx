@@ -5,6 +5,7 @@ import { TopView } from "./top-view"
 import { DetailsArea } from "./details-area"
 import { Notes } from "./notes"
 import { EmptyView } from "./empty-view"
+import { Suspense } from "react"
 
 // show the signle pets detail in dashboard 
 export const Petdetails = () => {
@@ -13,6 +14,7 @@ export const Petdetails = () => {
 
     return (
         <>
+            <Suspense fallback={<>loading ... </>} >
             {selectedPet ?
                 <section className="h-full w-full flex flex-col" >
 
@@ -25,6 +27,7 @@ export const Petdetails = () => {
                     <EmptyView />
                 </div>
             }
+            </Suspense>
         </>
     )
 }

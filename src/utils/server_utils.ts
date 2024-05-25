@@ -1,17 +1,7 @@
 import "server-only";
 import prisma from "@/lib/db";
-import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import { petType } from "@/types/petTypes";
-
-// check server side auth
-export async function CheckAuth() {
-  const session = await auth();
-  if (!session) {
-    redirect("/login");
-  }
-  return session;
-}
+import { sleep } from "@/lib/utils";
 
 // get single pet
 export async function getSinglePet(petId: string) {
@@ -31,11 +21,10 @@ export async function getSinglePet(petId: string) {
   }
 }
 
-export const getPets = async (id: string | undefined): Promise<petType[]> => {
+export const getPets = async (): Promise<petType[]> => {
+  await sleep(3000);
   try {
-    let pets = await prisma.pet.findMany({
-      where: { userId: id },
-    });
+    let pets = await prisma.pet.findMany({});
     if (!pets) {
       throw new Error("failed to find pets ");
     }

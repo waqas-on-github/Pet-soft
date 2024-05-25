@@ -60,8 +60,6 @@ const PetContextProvider = ({ children, data: pets }: { children: React.ReactNod
 
 
 
-
-
     return (
         <petContext.Provider value={{
             pets,

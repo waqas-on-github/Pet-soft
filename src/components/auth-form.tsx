@@ -1,15 +1,10 @@
 'use client'
 import { Label } from "./ui/label"
 import { Input } from "./ui/input"
-import { Button } from "./ui/button"
-import { usePathname } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { authSchema, authType } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { validateUserData } from "@/server_actions/helpers"
-import { login } from "@/server_actions/userActions"
-import { signup } from "@/server_actions/signUpAction"
-import { useFormStatus } from "react-dom"
 import AuthFormBtn from "./auth-form-btn"
 
 
@@ -40,11 +35,11 @@ const AuthForm = ({ type }: { type: 'login' | 'signup' }) => {
         const validatedValues = validateUserData(values)
 
         if (type === "login") {
-            await login(validatedValues)
+            // await login(validatedValues)
         }
 
         if (type === "signup") {
-            await signup(validatedValues)
+            // await signup(validatedValues)
         }
         reset()
     }

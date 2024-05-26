@@ -6,18 +6,15 @@ import { revalidatePath } from "next/cache";
 import { dbResponceType, petType } from "@/types/petTypes";
 import { Pet, Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
-import { CheckAuth } from "../utils/server_utils";
 
 export const addPet = async (data: petTypetwo) => {
   // checking user is authancated ?
-  const session = await CheckAuth();
 
   // //validating data
   let petdata = validatePetData(data);
   // adding user id into petdata
   petdata = {
     ...petdata,
-    userId: session?.user?.id as string,
   };
 
   // inserting data into db

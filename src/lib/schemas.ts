@@ -26,9 +26,9 @@ export const petFormSchem = z
 export type petTypetwo = z.infer<typeof petFormSchem>;
 
 // user schema 
-export const authSchema = z.object({
-  email: z.string().trim().email({ message: "email is required" }),
-  hashedPassword: z.string().trim().min(6, { message: "min 6 chars required" }),
+export const userSchema = z.object({
+  username: z.string().trim().email({ message: "user name  is required" }),
+  hashedpassword: z.string().trim().min(6, { message: "min 6 chars required" }),
 });
 
-export type authType = z.infer<typeof authSchema>;
+export type userType = z.infer<typeof userSchema>;

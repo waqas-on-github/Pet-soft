@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css"
 import QueryProvider from "@/context/QueryProvider";
-import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,11 +15,9 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
   return (
     <html lang="en">
       <body className={`${inter.className} text-sm min-h-[100vh]  text-zinc-900 bg-[#E5E8EC] `}>
-        <SessionProvider>
           <QueryProvider>
             {children}
         </QueryProvider>
-        </SessionProvider>
       </body>
     </html>
   );

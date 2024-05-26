@@ -1,4 +1,4 @@
-import { authType } from "@/lib/schemas";
+import { userType } from "@/lib/schemas";
 
 export type petType = {
   id: string;
@@ -56,5 +56,5 @@ export type submitFormType = {
 
 export type authProviderType = {
   children: React.ReactNode;
-  user: authType | undefined;
+  user: userType | undefined;
 };

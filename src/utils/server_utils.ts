@@ -2,6 +2,9 @@ import "server-only";
 import prisma from "@/lib/db";
 import { petType } from "@/types/petTypes";
 import { sleep } from "@/lib/utils";
+import { validateRequest } from "@/lib/auth";
+import { redirect } from "next/navigation";
+import { User, Session } from "@prisma/client";
 
 // get single pet
 export async function getSinglePet(petId: string) {
@@ -34,35 +37,16 @@ export const getPets = async (): Promise<petType[]> => {
   }
 };
 
-export const getUser = async (email: string | null | undefined) => {
-  if (email) {
-    try {
-      let user = await prisma.user.findUnique({
-        where: { email: email },
-      });
-
-      if (!user) throw new Error("failed to find user");
-      return user;
-    } catch (error) {
-      throw new Error("failed to find user");
-    }
+export const validateSession = async (): Promise<{
+  user: Pick<User, "id">;
+  session: Session;
+}> => {
+  const { user, session } = await validateRequest();
+  if (!session || !user) {
+    return redirect("/login");
   }
+  return {
+    user,
+    session,
+  };
 };
-
-// checking user existance in db
-export async function checkUserExists(email: string) {
-  let doseUserExists;
-  try {
-    doseUserExists = await prisma.user.findUnique({
-      where: { email: email },
-    });
-
-    if (doseUserExists) {
-      if ("email" in doseUserExists) {
-        throw new Error("user already exists");
-      }
-    }
-  } catch (error) {
-    throw new Error("user already exists");
-  }
-}

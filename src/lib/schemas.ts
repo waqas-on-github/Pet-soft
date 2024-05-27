@@ -23,11 +23,10 @@ export const petFormSchem = z
       "https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?auto=format&fit=crop&q=100&w=1970&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   }));
 
-export type petTypetwo = z.infer<typeof petFormSchem>;
 
 // user schema 
 export const userSchema = z.object({
-  username: z.string().trim().email({ message: "user name  is required" }),
+  username: z.string().trim().min(3, { message: "user name  is required" }),
   hashedpassword: z.string().trim().min(6, { message: "min 6 chars required" }),
 });
 

@@ -1,4 +1,3 @@
-import prisma from "@/lib/db";
 import { userSchema, petFormSchem } from "@/lib/schemas";
 
 //validating pet data
@@ -20,4 +19,3 @@ export function validateUserData(data: unknown) {
 
   return isvalidData.data;
 }
-

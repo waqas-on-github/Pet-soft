@@ -1,93 +1,104 @@
 "use server";
-
+import bcrypt from "bcryptjs";
 import { userType } from "@/lib/schemas";
 import { validateUserData } from "./helpers";
 import prisma from "@/lib/db";
-import bcrypt from "bcryptjs";
 import { lucia } from "@/lib/auth";
 import { User } from "@prisma/client";
 import { cookies } from "next/headers";
+import {
+  SessionCheckResponse,
+  UserCheckResponse,
+  checkUserExists,
+} from "./loginAction";
 
-export const signUpAction = async (data: userType) => {
-  // validate data
-  const validatedUserInput = validateUserData(data);
+export const signUpAction = async (
+  userCredentials: userType
+): Promise<UserCheckResponse | SessionCheckResponse> => {
+  // Validate user input
+  const validatedUserInput = validateUserData(userCredentials);
 
-  const hashedpass = await bcrypt.hash("example", 10);
-  validatedUserInput.hashedpassword = hashedpass;
+  // Hash the password
+  validatedUserInput.hashedpassword = await bcrypt.hash(
+    userCredentials.hashedpassword,
+    10
+  );
 
-  // sanitize data
+  // Check if the username already exists
+  const userCheck = await checkUserExists(validatedUserInput.username);
 
-  // insert data into db
-  const dbInsertResponce = await addUserInDb(validatedUserInput, hashedpass);
-  // afetr above operation completion let create session in db
-  // this will create session in be via lucai in session table automatically
-  if (dbInsertResponce.success === false) {
-    return dbInsertResponce;
+  if (userCheck.success) {
+    return {
+      success: false,
+      error: { message: "User already exists" },
+    };
   }
-  // creat session in db and add session in cookies
-  if (dbInsertResponce?.success) {
-    const createdSessionResponce = await createSessionInDb(
-      dbInsertResponce.user
-    );
 
-    return createdSessionResponce;
+  // Insert user into the database
+  const dbInsertResponse = await addUserToDb(validatedUserInput);
+
+  if (!dbInsertResponse.success) {
+    return dbInsertResponse;
   }
+
+  // Create session for the new user
+  const sessionResponse = await createSessionForUser(
+    dbInsertResponse.data.user
+  );
+
+  return sessionResponse;
 };
 
-const addUserInDb = async (
-  validatedUserInput: userType,
-  hashedpass: string
-) => {
-  let user: User;
+// Function to add user to the database
+const addUserToDb = async (
+  validatedUserInput: userType
+): Promise<UserCheckResponse> => {
   try {
-    user = await prisma.user.create({
-      data: { ...validatedUserInput, hashedpassword: hashedpass },
+    const user = await prisma.user.create({
+      data: validatedUserInput,
     });
-
-    if (!user) {
-      return {
-        success: false,
-        error: { message: "failed to  insert user in db " },
-      };
-    }
 
     return {
       success: true,
-      user: user,
+      data: { user },
     };
   } catch (error: any) {
     return {
       success: false,
-      error: error.message,
+      error: { message: error.message },
     };
   }
 };
 
-const createSessionInDb = async (user) => {
-  console.log("started creating sessions ------------------------------------");
+// Function to create a session for the user
+export const createSessionForUser = async (
+  user: User
+): Promise<SessionCheckResponse> => {
+  try {
+    const session = await lucia.createSession(user.id, {});
 
-  if (user.success && user.user) {
-    const session = await lucia.createSession("dgdsajdsagdsg", {
-      expiresAt: new Date(Date.now() + 300),
-    });
+    if (!session) {
+      return {
+        success: false,
+        error: { message: "faile to create session" },
+      };
+    }
 
-    console.log(session.userId);
-    console.log("ended creating session------------------------------------- ");
+    const sessionCookie = lucia.createSessionCookie(session.id);
+    cookies().set(
+      sessionCookie.name,
+      sessionCookie.value,
+      sessionCookie.attributes
+    );
+
+    return {
+      success: true,
+      data: { session },
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: { message: error.message },
+    };
   }
-
-  // if (!session) {
-  //   return {
-  //     success: false,
-  //     error: {
-  //       message: "failed to create session ",
-  //     },
-  //   };
-  // }
-
-  // const sessionCookie = lucia.createSessionCookie(session.id);
-  // console.log(sessionCookie);
-
-  // cookies().set("hoa", "valuex");
-
-  // return { sucess: true, data: { user: user.id } };
 };

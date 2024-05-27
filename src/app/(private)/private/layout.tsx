@@ -3,16 +3,16 @@ import { AppHeader } from "@/components/app-header"
 import { BackgroundPattern } from "@/components/background-pattern"
 import PetContextProvider from "@/context/pet-context-provider"
 import SearchContextProvider from "@/context/search-context_prvider"
-import { getPets, getUser } from "@/utils/server_utils"
+import { getPets, validateSession } from "@/utils/server_utils"
 import { childernType, petType } from "@/types/petTypes"
+
 
 export const dynamic = 'force-dynamic'
 
 
 const Layout = async ({ children }: childernType) => {
 
-
-
+    const { user } = await validateSession()
 
     // geting pets from db 
     const pets: petType[] = await getPets()

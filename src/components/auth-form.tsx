@@ -7,13 +7,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { validateUserData } from "@/server_actions/helpers"
 import AuthFormBtn from "./auth-form-btn"
 import { signUpAction } from "@/server_actions/signUpAction"
+import { redirect, useRouter } from "next/navigation"
+import { logInAction } from "@/server_actions/loginAction"
 
 
 
 const AuthForm = ({ type }: { type: 'login' | 'signup' }) => {
-    // getting current path name 
 
-
+    const router = useRouter()
 
     // hooke form for form state managment 
     const { register, getValues, trigger, formState: { errors }, reset }
@@ -32,19 +33,26 @@ const AuthForm = ({ type }: { type: 'login' | 'signup' }) => {
 
         // get values from from 
         const values = getValues()
-        console.log(values);
 
         // validate inputs 
 
         const validatedValues = validateUserData(values)
-        console.log(validatedValues);
 
         if (type === "login") {
-            // await login(validatedValues)
+            const actionResponce = await logInAction(validatedValues)
+            console.log(actionResponce);
+
+            if (actionResponce.success) {
+                redirect('/private/account')
+            }
+
         }
 
         if (type === "signup") {
-            await signUpAction(validatedValues)
+            const actionResponce = await signUpAction(validatedValues)
+            console.log(actionResponce);
+
+            if (actionResponce?.success) router.push('/login')
         }
         reset()
     }

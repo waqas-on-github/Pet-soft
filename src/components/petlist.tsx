@@ -2,6 +2,7 @@
 import { usePetContext, usePetSearchContext } from "@/lib/hooks"
 import { petType, petvalueType } from "@/types/petTypes"
 import Image from "next/image"
+import { Suspense } from "react"
 
 export const Petlist = () => {
 
@@ -23,14 +24,10 @@ export const Petlist = () => {
         allPets = filterdPets
     }
 
-    // data filtration logic 
-
-    // if (allPets && allPets.length === 0) {
-    //     return <div className="flex items-center justify-center mt-[58%]" > no pet found  </div>
-    // }
-
     return (
+        <Suspense fallback={<>loading pets </>}>
         <ul className=" bg-white border-b border-black/[0.08]" >
+
             {allPets && allPets.map((pet: petType) => (
 
                 <li key={pet.id}>
@@ -47,6 +44,7 @@ export const Petlist = () => {
                 </li>
             ))} 
         </ul>
+        </Suspense>
     )
 }
 

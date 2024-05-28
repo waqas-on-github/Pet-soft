@@ -15,40 +15,8 @@ const PetContextProvider = ({ children, data: pets }: { children: React.ReactNod
         setselectedPetId(id)
     }
 
-    // add a new pet 
-    const handleAddNewPet = (newPet: Omit<petType, "id">) => {
-
-
-    }
-
-    // edit new pet  
-    const handleEditNewPet = (newId: string, newPetData: Omit<petType, "id">) => {
-
-
-        const result = pets.filter((pet) => {
-
-            if (pet.id === newId) {
-                return {
-                    id: newId,
-                    ...newPetData
-                }
-            }
-            return pet
-        })
-
-        console.log(result);
-
-
-
-
-    }
-
-    // check/delete pet 
-
-
 
     // drived state 
-
     // for pet selection
     const selectedPet = pets?.find((pet) => {
         return selectedPetId === pet.id
@@ -67,9 +35,6 @@ const PetContextProvider = ({ children, data: pets }: { children: React.ReactNod
             selectedPet,
             totalPets,
             handlePetChange,
-            handleAddNewPet,
-            handleEditNewPet,
-
 
         }}>
             {children}

@@ -7,13 +7,11 @@ import { checkAuth, getPets } from "@/utils/server_utils"
 import { childernType, petType } from "@/types/petTypes"
 
 
-export const dynamic = 'force-dynamic'
 
 
 const Layout = async ({ children }: childernType) => {
 
     const { user } = await checkAuth()
-
     // geting pets from db 
     const pets: petType[] = await getPets(user.id)
 
@@ -22,7 +20,7 @@ const Layout = async ({ children }: childernType) => {
     return (
         <> 
             <BackgroundPattern />
-            <div className="max-w-[1050px] mx-auto flex flex-col min-h-screen" >
+            <div className="max-w-[1050px] mx-auto flex flex-col " >
                 <AppHeader />
                 <SearchContextProvider>
                     <PetContextProvider data={[...pets]} >

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <section className=" min-h-screen bg-[#5DC9A8] flex flex-col lg:flex-row items-center justify-center md:gap-10 gap-6  p-4 md:py-6  " >
+    <section className="  min-h-screen bg-[#5DC9A8] flex flex-col lg:flex-row items-center justify-center md:gap-10 gap-6  p-4 md:py-6  " >
       <Image
         src="https://bytegrad.com/course-assets/react-nextjs/petsoft-preview.png"
         width={500}
@@ -23,7 +23,6 @@ export default function Home() {
           <Button> <Link href='/signup'> Get started</Link></Button>
           <Button variant='secondary' > <Link href='/login' >Log in </Link> </Button>
         </div>
-        <Button> <Link href='/private/dashboard' > Dashboard </Link> </Button>
 
       </div>
     </section>

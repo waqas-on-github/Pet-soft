@@ -18,8 +18,6 @@ export type petvalueType = {
   pets: petType[];
   selectedPetId: string | null;
   handlePetChange: (id: string) => void;
-  handleAddNewPet: (newPet: Omit<petType, "id">) => void;
-  handleEditNewPet: (newId: string, newPetData: Omit<petType, "id">) => void;
   selectedPet: petType | undefined;
   totalPets: number;
 };

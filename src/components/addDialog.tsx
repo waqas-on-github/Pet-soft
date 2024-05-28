@@ -22,7 +22,7 @@ export function AddDialog({ actionType }: { actionType: "add" | "edit" }) {
     }
 
     return (
-        <Dialog open={isFormOpen} onOpenChange={setisFormOpen} >
+        <Dialog open={isFormOpen} onOpenChange={setisFormOpen}  >
 
             <DialogTrigger asChild>
                 {actionType == "add" ?
@@ -43,7 +43,6 @@ export function AddDialog({ actionType }: { actionType: "add" | "edit" }) {
                 {/* dialog main content  */}
                 <PetForm actionType={actionType} checkFormOpen={checkformOpen} />
             </DialogContent>
-
         </Dialog>
     )
 }

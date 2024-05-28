@@ -6,16 +6,17 @@ import { userSchema, userType } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { validateUserData } from "@/server_actions/helpers"
 import AuthFormBtn from "./auth-form-btn"
-import { signUpAction } from "@/server_actions/signUpAction"
-import { redirect, useRouter } from "next/navigation"
-import { logInAction } from "@/server_actions/loginAction"
+import { useRouter } from "next/navigation"
+import useLogin from "@/hooks/useLogin"
+import useSignUp from "@/hooks/useSignup"
 
 
 
 const AuthForm = ({ type }: { type: 'login' | 'signup' }) => {
 
     const router = useRouter()
-
+    const { mutate, status } = useLogin()
+    const { mutate: signupMutate } = useSignUp()
     // hooke form for form state managment 
     const { register, getValues, trigger, formState: { errors }, reset }
         = useForm<userType>(
@@ -29,7 +30,6 @@ const AuthForm = ({ type }: { type: 'login' | 'signup' }) => {
         // trigger from 
         const res = await trigger()
         if (!res) return
-        console.log("started submitting ");
 
         // get values from from 
         const values = getValues()
@@ -38,21 +38,24 @@ const AuthForm = ({ type }: { type: 'login' | 'signup' }) => {
 
         const validatedValues = validateUserData(values)
 
-        if (type === "login") {
-            const actionResponce = await logInAction(validatedValues)
-            console.log(actionResponce);
+        if (type === "login") { 
+            mutate(validatedValues,
+                {
+                    onSuccess: () => {
+                        router.push('/private/dashboard')
+                    },
+                })
 
-            if (actionResponce.success) {
-                redirect('/private/account')
-            }
+            reset()
 
         }
 
         if (type === "signup") {
-            const actionResponce = await signUpAction(validatedValues)
-            console.log(actionResponce);
-
-            if (actionResponce?.success) router.push('/login')
+            signupMutate(validatedValues, {
+                onSuccess: () => {
+                    router.push('/login')
+                }
+            })
         }
         reset()
     }

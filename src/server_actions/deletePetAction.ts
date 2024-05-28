@@ -1,14 +1,14 @@
 "use server";
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
-import { CheckAuth, getSinglePet } from "../utils/server_utils";
+import { checkAuth, getSinglePet } from "../utils/server_utils";
 
 // delete pet
 export const deletePet = async (petId: string) => {
   console.log("runnign onn server");
 
   // check user existance
-  const session = await CheckAuth();
+  const { user } = await checkAuth();
 
   // checking pet id exists or not
   if (!petId) throw new Error("no pet id provided");
@@ -16,7 +16,7 @@ export const deletePet = async (petId: string) => {
   const pet = await getSinglePet(petId);
   //check authorization the pet user is requesting is user own this pet
   // for this we will match userId with userId in pet
-  if (session.user?.id !== pet.userId) {
+  if (user?.id !== pet.userId) {
     throw new Error("not authorized to delete this pet");
   }
 
@@ -26,7 +26,7 @@ export const deletePet = async (petId: string) => {
     deletedPet = await prisma.pet.delete({
       where: {
         id: petId,
-        userId: session.user.id,
+        userId: user.id,
       },
     });
 

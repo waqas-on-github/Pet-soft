@@ -6,26 +6,13 @@ import prisma from "@/lib/db";
 import { lucia } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { Session, User } from "@prisma/client";
-
-export interface ErrorResponse {
-  success: false;
-  error: {
-    message: string;
-  };
-}
-
-export interface SuccessResponse<T> {
-  success: true;
-  data: T;
-}
-
-export type UserCheckResponse = ErrorResponse | SuccessResponse<{ user: User }>;
-export type SessionCheckResponse =
-  | ErrorResponse
-  | SuccessResponse<{ session: Session }>;
+import { SuccessResponse } from "@/types/petTypes";
+import { createSessionForUser } from "./signUpAction";
+import { sleep } from "@/lib/utils";
 
 // Function to log in a user
 export const logInAction = async (userCredentials: userType) => {
+  await sleep(2000);
   // Validate inputs
   const validatedUserInput = validateUserData(userCredentials);
 
@@ -33,7 +20,7 @@ export const logInAction = async (userCredentials: userType) => {
   const userCheck = await checkUserExists(validatedUserInput.username);
 
   if (!userCheck.success) {
-    return userCheck;
+    throw new Error("user not exists");
   }
 
   const user = userCheck.data.user;
@@ -45,22 +32,17 @@ export const logInAction = async (userCredentials: userType) => {
   );
 
   if (!isPasswordValid) {
-    return {
-      success: false,
-      error: {
-        message: "Invalid credentials",
-      },
-    };
+    throw new Error("invalid crediantials");
   }
 
-  // const createdSession = await createSessionForUser(user);
+  const createdSession = await createSessionForUser(user);
   // console.log(createdSession);
 
   // Check if session exists
   const sessionCheck = await getSessionFromDb(user.id);
-
+  // if session not exists
   if (!sessionCheck.success) {
-    return sessionCheck;
+    throw new Error("session not exists ");
   }
 
   const session = sessionCheck.data.session;
@@ -82,19 +64,14 @@ export const logInAction = async (userCredentials: userType) => {
 // Function to check if a user exists
 export const checkUserExists = async (
   username: string
-): Promise<UserCheckResponse> => {
+): Promise<SuccessResponse<{ user: User }>> => {
   try {
     const user = await prisma.user.findUnique({
       where: { username },
     });
 
     if (!user) {
-      return {
-        success: false,
-        error: {
-          message: "User does not exist",
-        },
-      };
+      throw new Error("User does not exist");
     }
 
     return {
@@ -102,31 +79,25 @@ export const checkUserExists = async (
       data: { user },
     };
   } catch (error: any) {
-    return {
-      success: false,
-      error: {
-        message: error.message,
-      },
-    };
+    throw new Error(error.message);
   }
 };
 
 // Function to get session from the database
 export const getSessionFromDb = async (
   userId: string
-): Promise<SessionCheckResponse> => {
+): Promise<
+  SuccessResponse<{
+    session: Session;
+  }>
+> => {
   try {
     const session = await prisma.session.findFirst({
       where: { userId },
     });
 
     if (!session) {
-      return {
-        success: false,
-        error: {
-          message: "Session does not exist",
-        },
-      };
+      throw new Error("session not exists");
     }
 
     return {
@@ -134,11 +105,7 @@ export const getSessionFromDb = async (
       data: { session },
     };
   } catch (error: any) {
-    return {
-      success: false,
-      error: {
-        message: error.message,
-      },
-    };
+    throw new Error(error.message);
   }
 };
+

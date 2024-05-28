@@ -1,12 +1,14 @@
 "use client"
-import { logout } from "@/server_actions/signout"
 import { Button } from "./ui/button"
+import useLogout from "@/hooks/useLogout"
 
 export const SignOutBtn = () => {
 
+    const { mutate, isPending } = useLogout()
+
     return (
-        <Button onClick={async () => {
-            await logout()
-        }} >SignOut</Button>
+        <Button disabled={isPending} onClick={() => {
+            mutate()
+        }} >SignOut     </Button>
     )
 }

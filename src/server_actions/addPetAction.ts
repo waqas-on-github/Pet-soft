@@ -1,20 +1,21 @@
 "use server";
 
-import { petTypetwo } from "@/lib/schemas";
 import { validatePetData } from "./helpers";
 import { revalidatePath } from "next/cache";
 import { dbResponceType, petType } from "@/types/petTypes";
 import { Pet, Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
+import { checkAuth } from "@/utils/server_utils";
 
-export const addPet = async (data: petTypetwo) => {
+export const addPet = async (data: Omit<Omit<petType, "userId">, "id">) => {
   // checking user is authancated ?
-
+  const { user } = await checkAuth();
   // //validating data
   let petdata = validatePetData(data);
   // adding user id into petdata
   petdata = {
     ...petdata,
+    userId: user.id,
   };
 
   // inserting data into db

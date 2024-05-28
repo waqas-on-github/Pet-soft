@@ -3,7 +3,7 @@ import { AppHeader } from "@/components/app-header"
 import { BackgroundPattern } from "@/components/background-pattern"
 import PetContextProvider from "@/context/pet-context-provider"
 import SearchContextProvider from "@/context/search-context_prvider"
-import { getPets, validateSession } from "@/utils/server_utils"
+import { checkAuth, getPets } from "@/utils/server_utils"
 import { childernType, petType } from "@/types/petTypes"
 
 
@@ -12,10 +12,10 @@ export const dynamic = 'force-dynamic'
 
 const Layout = async ({ children }: childernType) => {
 
-    const { user } = await validateSession()
+    const { user } = await checkAuth()
 
     // geting pets from db 
-    const pets: petType[] = await getPets()
+    const pets: petType[] = await getPets(user.id)
 
 
     // type narrowning for fix ing type issues and better error handling

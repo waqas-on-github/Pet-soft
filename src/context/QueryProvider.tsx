@@ -1,6 +1,6 @@
 "use client"
 import { childernType } from "@/types/petTypes"
-import { QueryClientProvider, QueryClient, useQueryClient } from "@tanstack/react-query"
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query"
 
 
 

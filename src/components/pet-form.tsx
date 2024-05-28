@@ -8,22 +8,25 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { petFormSchem } from "@/lib/schemas";
 import { PetFormProps, petType } from "@/types/petTypes";
-import { addPet } from "@/server_actions/addPetAction";
 import { editPet } from "@/server_actions/editPetAction";
+import useCreatePet from "@/hooks/useCreatePet";
+import useEditPet from "@/hooks/useEditPet";
 
 
-export const PetForm = ({ actionType, checkFormOpen }: PetFormProps) => {
+export const PetForm = ({ actionType, checkFormOpen }: Omit<PetFormProps, "pending">) => {
 
     //get actionType handler form state manager 
     const { selectedPet } = usePetContext()
-
-    // getting conditionla default value 
+    const { mutate, isPending, isError } = useCreatePet()
+    const { mutate: editMutate, isPending: editPending, isError: editError } = useEditPet()
+    // getting conditional default value 
     let defaultvalue;
     if (actionType === "edit") {
         if (selectedPet && selectedPet) {
             defaultvalue = selectedPet
         }
     }
+
 
 
     const { formState: { errors, isSubmitting }, register, trigger, getValues } = useForm<Omit<petType, "id">>(
@@ -36,40 +39,29 @@ export const PetForm = ({ actionType, checkFormOpen }: PetFormProps) => {
 
         let responce = await trigger()
         if (!responce) return null
-
-
         const data = getValues()
 
+
         if (actionType === "add") {
-            try { 
-                const res = await addPet(data)
-                res && checkFormOpen(false)
-
-        } catch (error) {
-            console.log(error);
-
-                alert(`${error}`)
+            mutate(data, { onSuccess: () => { checkFormOpen(false) } })
+            if (isError) {
                 checkFormOpen(false)
-        }
+            }
 
     }
 
         if (actionType === "edit") {
-            try {
-                if (selectedPet) {
-
-                    const res = await editPet(selectedPet?.id, data)
-                    res && checkFormOpen(false)
 
 
+            if (selectedPet) {
+                const editpetData = { id: selectedPet.id, ...data }
+                editMutate(editpetData, { onSuccess: () => { checkFormOpen(false) } })
+                if (isError) {
+                    checkFormOpen(false)    
                 }
 
-            } catch (error) {
-                console.log(error);
-
-                alert(`${error}`)
-                checkFormOpen(false)
             }
+
         }
     }
 
@@ -125,7 +117,7 @@ export const PetForm = ({ actionType, checkFormOpen }: PetFormProps) => {
                     {errors.notes && <p className="text-red-700">{errors.notes.message}</p>}
                 </div>
             </div>
-            <PetFormBtn actionType={actionType} />
+            <PetFormBtn actionType={actionType} pending={isPending} />
         </form>
     );
 }

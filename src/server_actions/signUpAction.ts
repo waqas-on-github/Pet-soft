@@ -4,17 +4,13 @@ import { userType } from "@/lib/schemas";
 import { validateUserData } from "./helpers";
 import prisma from "@/lib/db";
 import { lucia } from "@/lib/auth";
-import { User } from "@prisma/client";
+import { Session, User } from "@prisma/client";
 import { cookies } from "next/headers";
-import {
-  SessionCheckResponse,
-  UserCheckResponse,
-  checkUserExists,
-} from "./loginAction";
+import { SuccessResponse } from "@/types/petTypes";
 
 export const signUpAction = async (
   userCredentials: userType
-): Promise<UserCheckResponse | SessionCheckResponse> => {
+): Promise<SuccessResponse<{ user: User } | { session: Session }>> => {
   // Validate user input
   const validatedUserInput = validateUserData(userCredentials);
 
@@ -25,23 +21,23 @@ export const signUpAction = async (
   );
 
   // Check if the username already exists
-  const userCheck = await checkUserExists(validatedUserInput.username);
+  const userCheck = await checkUserExistsForSignUp(validatedUserInput.username);
+  console.log("reached heer ");
+  // console.log(userCheck);
 
-  if (userCheck.success) {
-    return {
-      success: false,
-      error: { message: "User already exists" },
-    };
+  if (userCheck?.success) {
+    throw new Error("User already exists");
   }
 
-  // Insert user into the database
+  // // Insert user into the database
   const dbInsertResponse = await addUserToDb(validatedUserInput);
 
   if (!dbInsertResponse.success) {
-    return dbInsertResponse;
+    throw new Error("failed to create account");
   }
 
   // Create session for the new user
+
   const sessionResponse = await createSessionForUser(
     dbInsertResponse.data.user
   );
@@ -52,36 +48,29 @@ export const signUpAction = async (
 // Function to add user to the database
 const addUserToDb = async (
   validatedUserInput: userType
-): Promise<UserCheckResponse> => {
+): Promise<SuccessResponse<{ user: User }>> => {
   try {
     const user = await prisma.user.create({
       data: validatedUserInput,
     });
-
+    if (!user) throw new Error("failed to add user in db ");
     return {
       success: true,
       data: { user },
     };
   } catch (error: any) {
-    return {
-      success: false,
-      error: { message: error.message },
-    };
+    throw new Error(error.message);
   }
 };
-
 // Function to create a session for the user
 export const createSessionForUser = async (
   user: User
-): Promise<SessionCheckResponse> => {
+): Promise<SuccessResponse<{ session: Session }>> => {
   try {
     const session = await lucia.createSession(user.id, {});
 
     if (!session) {
-      return {
-        success: false,
-        error: { message: "faile to create session" },
-      };
+      throw new Error("failed to create session");
     }
 
     const sessionCookie = lucia.createSessionCookie(session.id);
@@ -96,9 +85,21 @@ export const createSessionForUser = async (
       data: { session },
     };
   } catch (error: any) {
-    return {
-      success: false,
-      error: { message: error.message },
-    };
+    throw new Error(error.message, error.stack);
   }
+};
+
+export const checkUserExistsForSignUp = async (username: string) => {
+  const user = await prisma.user.findUnique({
+    where: { username },
+  });
+
+  if (!user) {
+    throw new Error("User does not exist");
+  }
+
+  return {
+    success: true,
+    data: { user },
+  };
 };

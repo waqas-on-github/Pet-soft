@@ -40,6 +40,7 @@ export type searchConextType = {
 export type PetFormProps = {
   actionType: "add" | "edit";
   checkFormOpen: (formResponce: boolean) => void;
+  pending: boolean;
 };
 
 export type dbResponceType = {
@@ -58,3 +59,15 @@ export type authProviderType = {
   children: React.ReactNode;
   user: userType | undefined;
 };
+
+export interface ErrorResponse {
+  success: false;
+  error: {
+    message: string;
+  };
+}
+
+export interface SuccessResponse<T> {
+  success: true;
+  data: T;
+}

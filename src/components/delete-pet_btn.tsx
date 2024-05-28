@@ -1,14 +1,14 @@
 "use client"
-import React, { useTransition } from 'react'
+import React from 'react'
 import PetButton from './pet-button'
 import { usePetContext } from '@/lib/hooks'
-import { deletePet } from '@/server_actions/deletePetAction'
+import useDeletePet from '@/hooks/useDeletePet'
 
 const DeletePetBtn = () => {
 
     const { selectedPetId } = usePetContext()
-    const [isPending, startTransition] = useTransition()
-
+    // Mutations
+    const { isPending, mutate } = useDeletePet()
 
 
     return (<>
@@ -16,9 +16,9 @@ const DeletePetBtn = () => {
             <PetButton
                 disabled={isPending}
                 actionType="checkout"
-                onClk={async () => startTransition(() => {
-                    deletePet(selectedPetId)
-                })
+                onClk={async () => {
+                    mutate(selectedPetId)
+                }
                 }>
                 checkout
             </PetButton>}

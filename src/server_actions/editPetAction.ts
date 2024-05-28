@@ -2,21 +2,23 @@
 import prisma from "@/lib/db";
 import { validatePetData } from "./helpers";
 import { revalidatePath } from "next/cache";
+import { checkAuth } from "@/utils/server_utils";
+import { petType } from "@/types/petTypes";
 
-export const editPet = async (petId: string, data: unknown) => {
-  // checking use auth
+export const editPet = async (data: petType) => {
+  // // checking use auth
+  const { user } = await checkAuth();
+  // // checking petid is present or not
+  if (!data.id) throw new Error("no pet id provided");
 
-  // checking petid is present or not
-  if (!petId) throw new Error("no pet id provided");
-
-  //validating data
+  // //validating data
   const petdata = validatePetData(data);
 
-  // updating pet data
+  // // updating pet data
   let updatedPet;
   try {
     updatedPet = prisma.pet.update({
-      where: { id: petId },
+      where: { id: data.id, userId: user.id },
       data: { ...petdata },
     });
   } catch (error) {

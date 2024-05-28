@@ -4,7 +4,6 @@ import { petType } from "@/types/petTypes";
 import { validateRequest } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { User, Session, Pet } from "@prisma/client";
-import { sleep } from "@/lib/utils";
 
 // get single pet
 export async function getSinglePet(petId: string): Promise<Pet> {
@@ -25,7 +24,6 @@ export async function getSinglePet(petId: string): Promise<Pet> {
 }
 
 export const getPets = async (id: string): Promise<petType[]> => {
-  await sleep(3000);
   try {
     let pets = await prisma.pet.findMany({
       where: {

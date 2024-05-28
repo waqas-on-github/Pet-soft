@@ -8,11 +8,9 @@ import { cookies } from "next/headers";
 import { Session, User } from "@prisma/client";
 import { SuccessResponse } from "@/types/petTypes";
 import { createSessionForUser } from "./signUpAction";
-import { sleep } from "@/lib/utils";
 
 // Function to log in a user
 export const logInAction = async (userCredentials: userType) => {
-  await sleep(2000);
   // Validate inputs
   const validatedUserInput = validateUserData(userCredentials);
 

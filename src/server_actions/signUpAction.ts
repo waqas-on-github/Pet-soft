@@ -22,10 +22,8 @@ export const signUpAction = async (
 
   // Check if the username already exists
   const userCheck = await checkUserExistsForSignUp(validatedUserInput.username);
-  console.log("reached heer ");
-  // console.log(userCheck);
 
-  if (userCheck?.success) {
+  if (!userCheck?.success) {
     throw new Error("User already exists");
   }
 
@@ -93,13 +91,16 @@ export const checkUserExistsForSignUp = async (username: string) => {
   const user = await prisma.user.findUnique({
     where: { username },
   });
+  console.log(user);
 
-  if (!user) {
-    throw new Error("User does not exist");
+  if (user) {
+    throw new Error("user already exists ");
   }
 
   return {
     success: true,
-    data: { user },
   };
 };
+
+
+

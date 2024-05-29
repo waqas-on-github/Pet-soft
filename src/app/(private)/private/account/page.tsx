@@ -8,7 +8,6 @@ const page = async () => {
 
     const { user } = await checkAuth()
     const userAccount = await getSingleUser(user.id)
-    console.log(userAccount);
 
 
     return (

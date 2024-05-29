@@ -1,4 +1,5 @@
 'use client'
+import { searchConextType } from "@/types/petTypes"
 import { createContext, useState } from "react"
 
 

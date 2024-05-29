@@ -1,3 +1,5 @@
+import { petType } from "@/types/petTypes";
+
 export const DetailsArea = ({ pet }: { pet: petType }) => (
 
     <div className="flex items-center justify-around px-5 py-10 text-center" >

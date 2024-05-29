@@ -9,6 +9,7 @@ export const SignOutBtn = () => {
     return (
         <Button disabled={isPending} onClick={() => {
             mutate()
-        }} >SignOut     </Button>
+        }} >SignOut
+        </Button>
     )
 }

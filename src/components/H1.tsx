@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import { childernType } from "@/types/petTypes"
 
 const H1 = ({ children, className }: childernType & { className?: string }) => {
     return (

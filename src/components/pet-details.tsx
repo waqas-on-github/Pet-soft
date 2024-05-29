@@ -16,7 +16,7 @@ export const Petdetails = () => {
         <>
             <Suspense fallback={<>loading ... </>} >
             {selectedPet ?
-                <section className="h-full w-full flex flex-col" >
+                    <section className="h-full w-full flex flex-col " >
 
                     <TopView pet={selectedPet} />
                     <DetailsArea pet={selectedPet} />

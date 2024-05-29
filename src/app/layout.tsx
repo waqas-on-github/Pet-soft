@@ -14,7 +14,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
-
   return (
     <html lang="en">
       <body className={`${inter.className} overflow-auto text-sm min-h-[100vh]  text-zinc-900 bg-[#E5E8EC] `}>

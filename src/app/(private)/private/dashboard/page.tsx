@@ -10,7 +10,7 @@ const page = async () => {
 
 
     return (
-        <main className="px-2">
+        <main className="px-2 ">
             <div className="flex items-center justify-between text-white py-7">
                 <Branding />
                 <Stats />
@@ -22,7 +22,7 @@ const page = async () => {
                     <Searchform />
                 </div>
 
-                <div className=" relative md:row-start-2  md:row-span-full overflow-y-auto   md:col-start-1  md:col-span-1" >
+                <div className=" relative md:row-start-2  md:row-span-full overflow-y-auto   md:col-start-1  md:col-span-1 " >
                     <Contentblock>
                         <Petlist />
                         <div className="absolute bottom-4 right-4" >
